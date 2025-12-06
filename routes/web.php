@@ -4,12 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\KalkulasiHistoryController;
 
-// SPA Catch-all route - must be at the end
-Route::get('/{any}', function () {
-    return view('app');
-})->where('any', '.*');
-
-// API Routes
+// API Routes - MUST be before catch-all
 Route::prefix('api')->group(function () {
     Route::get('/kriteria', [KriteriaController::class, 'index']);
     Route::post('/kriteria', [KriteriaController::class, 'store']);
@@ -34,3 +29,8 @@ Route::prefix('api')->group(function () {
     Route::get('/history/{id}', [KalkulasiHistoryController::class, 'show']);
     Route::delete('/history/{id}', [KalkulasiHistoryController::class, 'destroy']);
 });
+
+// SPA Catch-all route - MUST be at the end
+Route::get('/{any}', function () {
+    return view('app');
+})->where('any', '.*');
