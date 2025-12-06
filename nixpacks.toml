@@ -14,5 +14,12 @@ cmds = [
     'cat public/build/manifest.json || echo "Manifest not found"'
 ]
 
+[phases.deploy]
+cmds = [
+    'echo "Running migrations..."',
+    'php artisan config:clear',
+    'php artisan migrate:fresh --force --seed || echo "Migration failed, check database connection"'
+]
+
 [start]
-cmd = 'php artisan config:clear && php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=$PORT'
+cmd = 'php artisan serve --host=0.0.0.0 --port=$PORT'
