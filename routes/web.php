@@ -8,10 +8,6 @@ Route::get('/', function () {
     return view('app');
 });
 
-Route::get('/test-react', function () {
-    return view('test-react');
-});
-
 // API Routes
 Route::prefix('api')->group(function () {
     Route::get('/kriteria', [KriteriaController::class, 'index']);
