@@ -62,33 +62,14 @@ npm run dev
 
 ### Production Deployment (Railway)
 
-1. **Push to GitHub**
-```bash
-git add .
-git commit -m "Ready for production"
-git push
-```
+📖 **Lihat panduan lengkap di [DEPLOYMENT.md](./DEPLOYMENT.md)**
 
-2. **Setup Railway**
-   - Login to [Railway.app](https://railway.app)
-   - Create new project from GitHub repo
-   - Add MySQL database service
-
-3. **Set Environment Variables**
-```env
-APP_KEY=base64:... (generate with: php artisan key:generate --show)
-APP_ENV=production
-APP_DEBUG=false
-APP_URL=https://your-app.up.railway.app
-DB_CONNECTION=mysql
-DB_HOST=${MYSQLHOST}
-DB_PORT=${MYSQLPORT}
-DB_DATABASE=${MYSQLDATABASE}
-DB_USERNAME=${MYSQLUSER}
-DB_PASSWORD=${MYSQLPASSWORD}
-```
-
-4. **Deploy** - Railway will auto-deploy
+Quick steps:
+1. Push ke GitHub
+2. Deploy di Railway
+3. Tambah MySQL database
+4. Set environment variables
+5. Done!
 
 ## 👥 Default Users
 

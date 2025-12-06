@@ -26,7 +26,6 @@ export function Login({ onLogin }: LoginProps) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Login attempt:', { username, password, rememberMe });
 
         if (!username || !password) {
             setErrorMessage('Please fill in all fields');

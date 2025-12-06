@@ -13,8 +13,6 @@ function AppComponent() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userRole, setUserRole] = useState<string>('');
 
-    console.log('AppComponent rendered, page:', currentPage, 'role:', userRole);
-
     // Check if user is already logged in
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
@@ -61,8 +59,6 @@ function AppComponent() {
     }, []);
 
     const handleLogin = (username: string, password: string) => {
-        console.log('Login attempt:', username);
-
         // Simulasi login - nanti akan diganti dengan API call
         if (username === 'admin' && password === 'admin123') {
             const user = { username: 'admin', role: 'admin' };

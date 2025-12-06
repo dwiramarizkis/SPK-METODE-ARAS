@@ -4,9 +4,6 @@ import { createRoot } from 'react-dom/client';
 import AppComponent from './AppComponent';
 import { Toaster } from '@/components/ui/sonner';
 
-console.log('=== MAIN.TSX LOADED ===');
-console.log('React:', React.version);
-
 // Remove loading indicator
 const loadingEl = document.getElementById('loading');
 if (loadingEl) {
@@ -14,10 +11,9 @@ if (loadingEl) {
 }
 
 const container = document.getElementById('app');
-console.log('Container:', container);
 
 if (!container) {
-    console.error('❌ Container not found');
+    console.error('Container not found');
 } else {
     try {
         const root = createRoot(container);
@@ -27,9 +23,8 @@ if (!container) {
                 <Toaster position="top-right" richColors />
             </>
         );
-        console.log('✅ App rendered successfully!');
     } catch (error) {
-        console.error('❌ Render error:', error);
+        console.error('Render error:', error);
         container.innerHTML = `
             <div style="padding: 40px; background: #ff7a05; color: white; text-align: center;">
                 <h1>❌ Render Error</h1>
