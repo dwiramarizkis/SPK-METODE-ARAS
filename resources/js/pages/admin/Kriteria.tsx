@@ -13,6 +13,7 @@ import {
 import {
     Dialog,
     DialogContent,
+    DialogDescription,
     DialogHeader,
     DialogTitle,
     DialogFooter,
@@ -262,6 +263,9 @@ export function Kriteria() {
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>{isEdit ? 'Edit Kriteria' : 'Tambah Kriteria'}</DialogTitle>
+                        <DialogDescription>
+                            {isEdit ? 'Ubah data kriteria yang sudah ada' : 'Tambahkan kriteria baru untuk sistem pendukung keputusan'}
+                        </DialogDescription>
                     </DialogHeader>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         {isEdit && (
