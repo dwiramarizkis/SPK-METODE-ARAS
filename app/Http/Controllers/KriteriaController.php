@@ -51,13 +51,22 @@ class KriteriaController extends Controller
 
     public function show($id)
     {
-        $kriteria = Kriteria::findOrFail($id);
+        $kriteria = Kriteria::find($id);
+        
+        if (!$kriteria) {
+            return response()->json(['error' => 'Kriteria tidak ditemukan'], 404);
+        }
+        
         return response()->json($kriteria);
     }
 
     public function update(Request $request, $id)
     {
-        $kriteria = Kriteria::findOrFail($id);
+        $kriteria = Kriteria::find($id);
+        
+        if (!$kriteria) {
+            return response()->json(['error' => 'Kriteria tidak ditemukan'], 404);
+        }
 
         $validator = Validator::make($request->all(), [
             'nama_kriteria' => 'required|string|max:255',
@@ -81,7 +90,12 @@ class KriteriaController extends Controller
 
     public function destroy($id)
     {
-        $kriteria = Kriteria::findOrFail($id);
+        $kriteria = Kriteria::find($id);
+        
+        if (!$kriteria) {
+            return response()->json(['error' => 'Kriteria tidak ditemukan'], 404);
+        }
+        
         $kriteria->delete();
 
         // Reorder kode kriteria setelah delete

@@ -49,7 +49,8 @@ export function History() {
         // Simpan history data ke localStorage
         localStorage.setItem('viewHistory', JSON.stringify(item));
         // Redirect ke halaman kalkulasi
-        window.location.hash = 'kalkulasi';
+        window.history.pushState({}, '', '/kalkulasi');
+        window.dispatchEvent(new PopStateEvent('popstate'));
     };
 
     const handleDeleteClick = (id: number) => {

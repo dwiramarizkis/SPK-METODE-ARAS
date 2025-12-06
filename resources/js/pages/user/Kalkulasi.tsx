@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import {
     Dialog,
     DialogContent,
+    DialogDescription,
     DialogHeader,
     DialogTitle,
     DialogFooter,
@@ -567,6 +568,9 @@ export function Kalkulasi() {
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Simpan Kalkulasi ke History</DialogTitle>
+                        <DialogDescription>
+                            Berikan nama untuk menyimpan hasil kalkulasi ini ke history
+                        </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4">
                         <div className="space-y-2">
