@@ -39,7 +39,14 @@ export function NavMain({ items }: { items: NavItem[] }) {
                                             {item.items.map((subItem) => (
                                                 <SidebarMenuSubItem key={subItem.title}>
                                                     <SidebarMenuSubButton asChild>
-                                                        <a href={subItem.href || '#'}>
+                                                        <a
+                                                            href={subItem.href || '/dashboard'}
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                window.history.pushState({}, '', subItem.href || '/dashboard');
+                                                                window.dispatchEvent(new PopStateEvent('popstate'));
+                                                            }}
+                                                        >
                                                             {subItem.icon && <subItem.icon />}
                                                             <span>{subItem.title}</span>
                                                         </a>
@@ -56,7 +63,14 @@ export function NavMain({ items }: { items: NavItem[] }) {
                     return (
                         <SidebarMenuItem key={item.title}>
                             <SidebarMenuButton asChild tooltip={item.title}>
-                                <a href={item.href || '#'}>
+                                <a
+                                    href={item.href || '/dashboard'}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        window.history.pushState({}, '', item.href || '/dashboard');
+                                        window.dispatchEvent(new PopStateEvent('popstate'));
+                                    }}
+                                >
                                     {item.icon && <item.icon />}
                                     <span>{item.title}</span>
                                 </a>

@@ -17,17 +17,17 @@ import AppLogo from '@/components/app-logo';
 const userNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        href: '#',
+        href: '/dashboard',
         icon: LayoutGrid,
     },
     {
         title: 'Kalkulasi',
-        href: '#kalkulasi',
+        href: '/kalkulasi',
         icon: Calculator,
     },
     {
         title: 'History',
-        href: '#history',
+        href: '/history',
         icon: History,
     },
 ];
@@ -39,7 +39,7 @@ export default function UserSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <a href="#">
+                            <a href="/dashboard">
                                 <AppLogo />
                             </a>
                         </SidebarMenuButton>

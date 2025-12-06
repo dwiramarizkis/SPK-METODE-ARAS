@@ -4,9 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\KalkulasiHistoryController;
 
-Route::get('/', function () {
+// SPA Catch-all route - must be at the end
+Route::get('/{any}', function () {
     return view('app');
-});
+})->where('any', '.*');
 
 // API Routes
 Route::prefix('api')->group(function () {

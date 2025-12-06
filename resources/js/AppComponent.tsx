@@ -24,25 +24,25 @@ function AppComponent() {
         }
     }, []);
 
-    // Handle hash navigation
+    // Handle browser navigation (without hash)
     useEffect(() => {
-        const handleHashChange = () => {
-            const hash = window.location.hash.slice(1);
-            if (hash === 'kriteria' && userRole === 'admin') {
+        const handleNavigation = () => {
+            const path = window.location.pathname.slice(1); // Remove leading /
+            if (path === 'kriteria' && userRole === 'admin') {
                 setCurrentPage('kriteria');
-            } else if (hash === 'kalkulasi' && userRole === 'user') {
+            } else if (path === 'kalkulasi' && userRole === 'user') {
                 setCurrentPage('kalkulasi');
-            } else if (hash === 'history' && userRole === 'user') {
+            } else if (path === 'history' && userRole === 'user') {
                 setCurrentPage('history');
-            } else if (hash === '' || hash === 'dashboard') {
+            } else if (path === '' || path === 'dashboard') {
                 setCurrentPage('dashboard');
             }
         };
 
-        window.addEventListener('hashchange', handleHashChange);
-        handleHashChange();
+        window.addEventListener('popstate', handleNavigation);
+        handleNavigation();
 
-        return () => window.removeEventListener('hashchange', handleHashChange);
+        return () => window.removeEventListener('popstate', handleNavigation);
     }, [userRole]);
 
     // Listen for logout event
@@ -51,7 +51,7 @@ function AppComponent() {
             setIsLoggedIn(false);
             setUserRole('');
             setCurrentPage('login');
-            window.location.hash = '';
+            window.history.pushState({}, '', '/');
         };
 
         window.addEventListener('logout', handleLogoutEvent);

@@ -17,12 +17,12 @@ import AppLogo from '@/components/app-logo';
 const adminNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        href: '#',
+        href: '/dashboard',
         icon: LayoutGrid,
     },
     {
         title: 'Kriteria',
-        href: '#kriteria',
+        href: '/kriteria',
         icon: ListChecks,
     },
 ];
@@ -34,7 +34,7 @@ export default function AdminSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <a href="#">
+                            <a href="/dashboard">
                                 <AppLogo />
                             </a>
                         </SidebarMenuButton>
