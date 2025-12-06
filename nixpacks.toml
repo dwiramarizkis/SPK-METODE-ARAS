@@ -3,13 +3,16 @@ nixPkgs = ['php82', 'php82Packages.composer']
 
 [phases.install]
 cmds = [
-    'composer install --optimize-autoloader --no-dev --no-interaction',
-    'npm ci',
-    'npm run build'
+    'composer install --optimize-autoloader --no-dev --no-interaction'
 ]
 
 [phases.build]
-cmds = []
+cmds = [
+    'npm ci --legacy-peer-deps',
+    'npm run build',
+    'ls -la public/build',
+    'cat public/build/manifest.json || echo "Manifest not found"'
+]
 
 [start]
 cmd = 'php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=$PORT'
