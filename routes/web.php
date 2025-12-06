@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KriteriaController;
+use App\Http\Controllers\KalkulasiHistoryController;
 
 Route::get('/', function () {
     return view('app');
@@ -29,4 +30,10 @@ Route::prefix('api')->group(function () {
             ];
         }));
     });
+    
+    // Kalkulasi History Routes
+    Route::get('/history', [KalkulasiHistoryController::class, 'index']);
+    Route::post('/history', [KalkulasiHistoryController::class, 'store']);
+    Route::get('/history/{id}', [KalkulasiHistoryController::class, 'show']);
+    Route::delete('/history/{id}', [KalkulasiHistoryController::class, 'destroy']);
 });

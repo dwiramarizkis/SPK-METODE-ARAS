@@ -26,9 +26,18 @@ class KriteriaController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        // Auto-generate kode kriteria
-        $count = Kriteria::count();
-        $kodeKriteria = 'C' . ($count + 1);
+        // Auto-generate kode kriteria - cari nomor tertinggi yang ada
+        $lastKriteria = Kriteria::orderBy('id', 'desc')->first();
+        
+        if ($lastKriteria) {
+            // Extract nomor dari kode terakhir (misal: C3 -> 3)
+            $lastNumber = (int) str_replace('C', '', $lastKriteria->kode_kriteria);
+            $newNumber = $lastNumber + 1;
+        } else {
+            $newNumber = 1;
+        }
+        
+        $kodeKriteria = 'C' . $newNumber;
 
         $kriteria = Kriteria::create([
             'nama_kriteria' => $request->nama_kriteria,

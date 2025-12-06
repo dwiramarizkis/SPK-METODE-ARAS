@@ -5,9 +5,16 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Calculator, Plus, Trash2 } from 'lucide-react';
+import { Calculator, Plus, Trash2, Save } from 'lucide-react';
 import { api } from '@/lib/api';
 import { toast } from 'sonner';
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+} from '@/components/ui/dialog';
 
 interface Kriteria {
     id: number;
@@ -44,9 +51,25 @@ export function Kalkulasi() {
     const [hasil, setHasil] = useState<HasilARAS[]>([]);
     const [proses, setProses] = useState<ProsesPerhitungan | null>(null);
     const [showHasil, setShowHasil] = useState(false);
+    const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
+    const [namaKalkulasi, setNamaKalkulasi] = useState('');
+    const [isViewingHistory, setIsViewingHistory] = useState(false);
+    const [historyName, setHistoryName] = useState('');
 
     useEffect(() => {
         fetchKriteria();
+
+        // Check if viewing history
+        const viewHistory = localStorage.getItem('viewHistory');
+        if (viewHistory) {
+            try {
+                const historyData = JSON.parse(viewHistory);
+                loadHistoryData(historyData);
+                localStorage.removeItem('viewHistory'); // Clear after loading
+            } catch (error) {
+                console.error('Error loading history:', error);
+            }
+        }
     }, []);
 
     const fetchKriteria = async () => {
@@ -56,6 +79,40 @@ export function Kalkulasi() {
         } catch (error) {
             toast.error('Gagal memuat kriteria');
         }
+    };
+
+    const loadHistoryData = (historyData: any) => {
+        // Load kriteria from history (snapshot saat kalkulasi)
+        setKriteria(historyData.data_kriteria);
+
+        // Load alternatif
+        setAlternatif(historyData.data_alternatif);
+
+        // Load hasil perhitungan
+        setHasil(historyData.hasil_perhitungan);
+
+        // Load proses perhitungan
+        setProses(historyData.proses_perhitungan);
+
+        // Show hasil
+        setShowHasil(true);
+
+        // Set viewing history flag
+        setIsViewingHistory(true);
+        setHistoryName(historyData.nama_kalkulasi);
+
+        toast.success(`Menampilkan: ${historyData.nama_kalkulasi}`);
+    };
+
+    const handleNewCalculation = () => {
+        setAlternatif([]);
+        setHasil([]);
+        setProses(null);
+        setShowHasil(false);
+        setIsViewingHistory(false);
+        setHistoryName('');
+        fetchKriteria();
+        toast.info('Memulai kalkulasi baru');
     };
 
     const tambahAlternatif = () => {
@@ -178,6 +235,41 @@ export function Kalkulasi() {
         toast.success('Kalkulasi berhasil!');
     };
 
+    const handleSaveClick = () => {
+        if (!showHasil) {
+            toast.error('Lakukan kalkulasi terlebih dahulu');
+            return;
+        }
+        setIsSaveDialogOpen(true);
+    };
+
+    const handleSaveHistory = async () => {
+        if (!namaKalkulasi.trim()) {
+            toast.error('Nama kalkulasi tidak boleh kosong');
+            return;
+        }
+
+        try {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+            await api.post('/api/history', {
+                user_id: user.id || 1,
+                nama_kalkulasi: namaKalkulasi,
+                data_alternatif: alternatif,
+                data_kriteria: kriteria,
+                hasil_perhitungan: hasil,
+                proses_perhitungan: proses,
+            });
+
+            toast.success('Kalkulasi berhasil disimpan ke history!');
+            setIsSaveDialogOpen(false);
+            setNamaKalkulasi('');
+        } catch (error) {
+            console.error('Error saving history:', error);
+            toast.error('Gagal menyimpan history');
+        }
+    };
+
     return (
         <SidebarProvider>
             <UserSidebar />
@@ -190,17 +282,38 @@ export function Kalkulasi() {
                     </header>
                     <div className="flex flex-1 flex-col gap-6 p-6 overflow-auto bg-gray-50">
                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                            <p className="text-gray-600 text-sm sm:text-base">Metode Additive Ratio Assessment</p>
+                            <div>
+                                <p className="text-gray-600 text-sm sm:text-base">Metode Additive Ratio Assessment</p>
+                                {isViewingHistory && (
+                                    <p className="text-xs text-orange-600 font-semibold mt-1">
+                                        📋 Viewing: {historyName}
+                                    </p>
+                                )}
+                            </div>
                             <div className="flex gap-2 w-full sm:w-auto">
-                                <Button onClick={tambahAlternatif} variant="neutral" className="flex-1 sm:flex-none">
+                                <Button onClick={tambahAlternatif} variant="neutral" className="flex-1 sm:flex-none" disabled={isViewingHistory}>
                                     <Plus className="mr-2 h-4 w-4" />
                                     <span className="hidden sm:inline">Tambah Alternatif</span>
                                     <span className="sm:hidden">Tambah</span>
                                 </Button>
-                                <Button onClick={hitungARAS} className="flex-1 sm:flex-none">
+                                <Button onClick={hitungARAS} className="flex-1 sm:flex-none" disabled={isViewingHistory}>
                                     <Calculator className="mr-2 h-4 w-4" />
                                     Hitung
                                 </Button>
+                                {showHasil && !isViewingHistory && (
+                                    <Button onClick={handleSaveClick} variant="neutral" className="flex-1 sm:flex-none">
+                                        <Save className="mr-2 h-4 w-4" />
+                                        <span className="hidden sm:inline">Simpan</span>
+                                        <span className="sm:hidden">Save</span>
+                                    </Button>
+                                )}
+                                {isViewingHistory && (
+                                    <Button onClick={handleNewCalculation} variant="neutral" className="flex-1 sm:flex-none">
+                                        <Plus className="mr-2 h-4 w-4" />
+                                        <span className="hidden sm:inline">Kalkulasi Baru</span>
+                                        <span className="sm:hidden">Baru</span>
+                                    </Button>
+                                )}
                             </div>
                         </div>
 
@@ -448,6 +561,35 @@ export function Kalkulasi() {
                     </div>
                 </div>
             </main>
+
+            {/* Save Dialog */}
+            <Dialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Simpan Kalkulasi ke History</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="nama">Nama Kalkulasi</Label>
+                            <Input
+                                id="nama"
+                                value={namaKalkulasi}
+                                onChange={(e) => setNamaKalkulasi(e.target.value)}
+                                placeholder="Contoh: Pemilihan Lokasi Perumahan Desember 2025"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <Button type="button" variant="neutral" onClick={() => setIsSaveDialogOpen(false)}>
+                            Batal
+                        </Button>
+                        <Button type="button" onClick={handleSaveHistory}>
+                            Simpan
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </SidebarProvider>
     );
 }

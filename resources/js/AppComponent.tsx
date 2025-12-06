@@ -4,8 +4,9 @@ import { Dashboard as AdminDashboard } from './pages/admin/Dashboard';
 import { Dashboard as UserDashboard } from './pages/user/Dashboard';
 import { Kriteria } from './pages/admin/Kriteria';
 import { Kalkulasi } from './pages/user/Kalkulasi';
+import { History } from './pages/user/History';
 
-type Page = 'login' | 'dashboard' | 'kriteria' | 'kalkulasi';
+type Page = 'login' | 'dashboard' | 'kriteria' | 'kalkulasi' | 'history';
 
 function AppComponent() {
     const [currentPage, setCurrentPage] = useState<Page>('login');
@@ -33,6 +34,8 @@ function AppComponent() {
                 setCurrentPage('kriteria');
             } else if (hash === 'kalkulasi' && userRole === 'user') {
                 setCurrentPage('kalkulasi');
+            } else if (hash === 'history' && userRole === 'user') {
+                setCurrentPage('history');
             } else if (hash === '' || hash === 'dashboard') {
                 setCurrentPage('dashboard');
             }
@@ -86,6 +89,10 @@ function AppComponent() {
 
         if (currentPage === 'kalkulasi' && userRole === 'user') {
             return <Kalkulasi />;
+        }
+
+        if (currentPage === 'history' && userRole === 'user') {
+            return <History />;
         }
 
         if (currentPage === 'dashboard') {

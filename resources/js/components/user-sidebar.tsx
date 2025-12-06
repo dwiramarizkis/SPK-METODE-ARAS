@@ -11,7 +11,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
-import { LayoutGrid, ListChecks } from 'lucide-react';
+import { LayoutGrid, Calculator, History } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 
 const userNavItems: NavItem[] = [
@@ -23,7 +23,12 @@ const userNavItems: NavItem[] = [
     {
         title: 'Kalkulasi',
         href: '#kalkulasi',
-        icon: ListChecks,
+        icon: Calculator,
+    },
+    {
+        title: 'History',
+        href: '#history',
+        icon: History,
     },
 ];
 
