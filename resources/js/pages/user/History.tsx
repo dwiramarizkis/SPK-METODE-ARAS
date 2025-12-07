@@ -33,7 +33,13 @@ export function History() {
     const [deleteId, setDeleteId] = useState<number | null>(null);
 
     useEffect(() => {
-        fetchHistory();
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+        if (user.role === 'guest') {
+            toast.info('Tamu tidak memiliki history. Silakan login untuk menyimpan dan melihat history.');
+        } else {
+            fetchHistory();
+        }
     }, []);
 
     const fetchHistory = async () => {
@@ -108,44 +114,63 @@ export function History() {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody className="bg-white">
-                                    {history.length === 0 ? (
-                                        <TableRow>
-                                            <TableCell colSpan={4} className="text-center py-8 text-gray-500">
-                                                <HistoryIcon className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                                                Belum ada history kalkulasi
-                                            </TableCell>
-                                        </TableRow>
-                                    ) : (
-                                        history.map((item) => (
-                                            <TableRow key={item.id} className="bg-white hover:bg-gray-50">
-                                                <TableCell className="font-semibold bg-white">{item.nama_kalkulasi}</TableCell>
-                                                <TableCell className="bg-white">{formatDate(item.created_at)}</TableCell>
-                                                <TableCell className="bg-white">{item.data_alternatif.length} alternatif</TableCell>
-                                                <TableCell className="text-center bg-white">
-                                                    <div className="flex justify-center gap-2">
-                                                        <Button
-                                                            variant="noShadow"
-                                                            size="sm"
-                                                            onClick={() => handleView(item)}
-                                                            className="min-w-[40px]"
-                                                        >
-                                                            <Eye className="h-4 w-4" />
-                                                            <span className="ml-2 hidden md:inline">Lihat</span>
-                                                        </Button>
-                                                        <Button
-                                                            variant="noShadow"
-                                                            size="sm"
-                                                            onClick={() => handleDeleteClick(item.id)}
-                                                            className="min-w-[40px]"
-                                                        >
-                                                            <Trash2 className="h-4 w-4" />
-                                                            <span className="ml-2 hidden md:inline">Hapus</span>
-                                                        </Button>
-                                                    </div>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))
-                                    )}
+                                    {(() => {
+                                        const user = JSON.parse(localStorage.getItem('user') || '{}');
+                                        if (user.role === 'guest') {
+                                            return (
+                                                <TableRow>
+                                                    <TableCell colSpan={4} className="text-center py-8 text-gray-500">
+                                                        <HistoryIcon className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                                                        <p className="font-semibold">Mode Tamu</p>
+                                                        <p className="text-sm mt-2">Silakan login untuk menyimpan dan melihat history kalkulasi</p>
+                                                    </TableCell>
+                                                </TableRow>
+                                            );
+                                        }
+
+                                        if (history.length === 0) {
+                                            return (
+                                                <TableRow>
+                                                    <TableCell colSpan={4} className="text-center py-8 text-gray-500">
+                                                        <HistoryIcon className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                                                        Belum ada history kalkulasi
+                                                    </TableCell>
+                                                </TableRow>
+                                            );
+                                        }
+
+                                        return (
+                                            history.map((item) => (
+                                                <TableRow key={item.id} className="bg-white hover:bg-gray-50">
+                                                    <TableCell className="font-semibold bg-white">{item.nama_kalkulasi}</TableCell>
+                                                    <TableCell className="bg-white">{formatDate(item.created_at)}</TableCell>
+                                                    <TableCell className="bg-white">{item.data_alternatif.length} alternatif</TableCell>
+                                                    <TableCell className="text-center bg-white">
+                                                        <div className="flex justify-center gap-2">
+                                                            <Button
+                                                                variant="noShadow"
+                                                                size="sm"
+                                                                onClick={() => handleView(item)}
+                                                                className="min-w-[40px]"
+                                                            >
+                                                                <Eye className="h-4 w-4" />
+                                                                <span className="ml-2 hidden md:inline">Lihat</span>
+                                                            </Button>
+                                                            <Button
+                                                                variant="noShadow"
+                                                                size="sm"
+                                                                onClick={() => handleDeleteClick(item.id)}
+                                                                className="min-w-[40px]"
+                                                            >
+                                                                <Trash2 className="h-4 w-4" />
+                                                                <span className="ml-2 hidden md:inline">Hapus</span>
+                                                            </Button>
+                                                        </div>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))
+                                        );
+                                    })()}
                                 </TableBody>
                             </Table>
                         </div>

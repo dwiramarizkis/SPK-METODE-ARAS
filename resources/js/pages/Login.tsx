@@ -15,9 +15,10 @@ import {
 
 interface LoginProps {
     onLogin?: (username: string, password: string) => void;
+    onGuestLogin?: () => void;
 }
 
-export function Login({ onLogin }: LoginProps) {
+export function Login({ onLogin, onGuestLogin }: LoginProps) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
@@ -91,6 +92,24 @@ export function Login({ onLogin }: LoginProps) {
 
                             <Button type="submit" className="w-full">
                                 Login
+                            </Button>
+
+                            <div className="relative my-6">
+                                <div className="absolute inset-0 flex items-center">
+                                    <span className="w-full border-t-2 border-border" />
+                                </div>
+                                <div className="relative flex justify-center text-xs uppercase">
+                                    <span className="bg-white px-2 text-gray-500">Atau</span>
+                                </div>
+                            </div>
+
+                            <Button
+                                type="button"
+                                variant="neutral"
+                                className="w-full"
+                                onClick={onGuestLogin}
+                            >
+                                Lanjutkan sebagai Tamu
                             </Button>
                         </form>
                     </CardContent>

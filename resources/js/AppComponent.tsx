@@ -30,9 +30,9 @@ function AppComponent() {
             const path = window.location.pathname.slice(1); // Remove leading /
             if (path === 'kriteria' && userRole === 'admin') {
                 setCurrentPage('kriteria');
-            } else if (path === 'kalkulasi' && userRole === 'user') {
+            } else if (path === 'kalkulasi' && (userRole === 'user' || userRole === 'guest')) {
                 setCurrentPage('kalkulasi');
-            } else if (path === 'history' && userRole === 'user') {
+            } else if (path === 'history' && (userRole === 'user' || userRole === 'guest')) {
                 setCurrentPage('history');
             } else if (path === '' || path === 'dashboard') {
                 setCurrentPage('dashboard');
@@ -77,17 +77,25 @@ function AppComponent() {
         }
     };
 
+    const handleGuestLogin = () => {
+        const guestUser = { username: 'Tamu', role: 'guest' };
+        localStorage.setItem('user', JSON.stringify(guestUser));
+        setIsLoggedIn(true);
+        setUserRole('guest');
+        setCurrentPage('dashboard');
+    };
+
     // Render based on current page
     if (isLoggedIn) {
         if (currentPage === 'kriteria' && userRole === 'admin') {
             return <Kriteria />;
         }
 
-        if (currentPage === 'kalkulasi' && userRole === 'user') {
+        if (currentPage === 'kalkulasi' && (userRole === 'user' || userRole === 'guest')) {
             return <Kalkulasi />;
         }
 
-        if (currentPage === 'history' && userRole === 'user') {
+        if (currentPage === 'history' && (userRole === 'user' || userRole === 'guest')) {
             return <History />;
         }
 
@@ -100,7 +108,7 @@ function AppComponent() {
         }
     }
 
-    return <Login onLogin={handleLogin} />;
+    return <Login onLogin={handleLogin} onGuestLogin={handleGuestLogin} />;
 }
 
 export default AppComponent;

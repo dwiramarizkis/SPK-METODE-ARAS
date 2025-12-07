@@ -237,6 +237,13 @@ export function Kalkulasi() {
     };
 
     const handleSaveClick = () => {
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+        if (user.role === 'guest') {
+            toast.error('Tamu tidak dapat menyimpan history. Silakan login untuk menyimpan.');
+            return;
+        }
+
         if (!showHasil) {
             toast.error('Lakukan kalkulasi terlebih dahulu');
             return;
