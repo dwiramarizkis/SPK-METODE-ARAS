@@ -3,7 +3,8 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import UserSidebar from '@/components/user-sidebar';
 
 export function Dashboard() {
-    const userName = localStorage.getItem('userName') || 'User';
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const userName = user.username || 'User';
 
     return (
         <SidebarProvider>
